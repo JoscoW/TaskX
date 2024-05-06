@@ -11,7 +11,7 @@ services:
     networks:
       - private-network
     volumes:
-      - ./data/init:/docker-entrypoint-initdb.d/
+      - ./data:/docker-entrypoint-initdb.d/
       - taskx-db-volume:/var/lib/mysql
     healthcheck:
       test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
