@@ -56,6 +56,7 @@ func (r *TaskXRepository) GetTasks() (tasks []*pb.Task, err error) {
 
 	err = r.DB.Select(&tasks, "SELECT * FROM tasks")
 	if err != nil {
+		slog.Error("error fetching tasks from db", "error", err)
 		return nil, err
 	}
 
@@ -65,6 +66,9 @@ func (r *TaskXRepository) GetTasks() (tasks []*pb.Task, err error) {
 func (r *TaskXRepository) AddTask(description string) (err error) {
 
 	_, err = r.DB.Exec("INSERT INTO tasks (description, completed) VALUES (?, 0)", description)
+	if err != nil {
+		slog.Error("error inserting task into db", "error", err)
+	}
 
 	return err
 }
@@ -72,6 +76,9 @@ func (r *TaskXRepository) AddTask(description string) (err error) {
 func (r *TaskXRepository) CompleteTask(id int64) (err error) {
 
 	_, err = r.DB.Exec("UPDATE tasks SET completed = 1 WHERE id = ?", id)
+	if err != nil {
+		slog.Error("error updating completed field in db", "error", err)
+	}
 
 	return err
 }
