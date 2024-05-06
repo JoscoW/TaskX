@@ -68,3 +68,10 @@ func (r *TaskXRepository) AddTask(description string) (err error) {
 
 	return err
 }
+
+func (r *TaskXRepository) CompleteTask(id int64) (err error) {
+
+	_, err = r.DB.Exec("UPDATE tasks SET completed = 1 WHERE id = ?", id)
+
+	return err
+}

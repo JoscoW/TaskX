@@ -15,7 +15,7 @@ message AddTaskReq {
 }
 
 message CompleteTaskReq {
-  string ID = 1;
+  int64 ID = 1;
 }
 
 message GetTasksReq {

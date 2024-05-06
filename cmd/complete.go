@@ -1,7 +1,11 @@
 package cmd
 
 import (
+	"context"
 	"fmt"
+	"strconv"
+	"taskx-server/pb"
+	"taskx/tool"
 
 	"github.com/spf13/cobra"
 )
@@ -29,7 +33,28 @@ func init() {
 }
 
 func completeTask(cmd *cobra.Command, args []string) error {
-	fmt.Println("complete task called")
+
+	taskID, err := strconv.ParseInt(args[0], 10, 64)
+	if err != nil {
+		return err
+	}
+
+	conn, err := tool.GetClientConnection()
+	if err != nil {
+		return err
+	}
+
+	defer conn.Close()
+
+	client := pb.NewTaskXServiceClient(conn)
+	_, err = client.CompleteTask(context.Background(), &pb.CompleteTaskReq{
+		ID: taskID,
+	})
+	if err != nil {
+		return err
+	}
+
+	fmt.Println(fmt.Sprintf("Task with ID:%s marked as complete", args[0]))
 
 	return nil
 }

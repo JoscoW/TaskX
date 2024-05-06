@@ -35,3 +35,7 @@ func (t *TaskXService) AddTask(_ context.Context, req *pb.AddTaskReq) (*emptypb.
 	return &emptypb.Empty{}, t.Repository.AddTask(req.Description)
 
 }
+
+func (t *TaskXService) CompleteTask(_ context.Context, req *pb.CompleteTaskReq) (*emptypb.Empty, error) {
+	return &emptypb.Empty{}, t.Repository.CompleteTask(req.ID)
+}
