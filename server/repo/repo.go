@@ -61,3 +61,10 @@ func (r *TaskXRepository) GetTasks() (tasks []*pb.Task, err error) {
 
 	return tasks, nil
 }
+
+func (r *TaskXRepository) AddTask(description string) (err error) {
+
+	_, err = r.DB.Exec("INSERT INTO tasks (description, completed) VALUES (?, 0)", description)
+
+	return err
+}

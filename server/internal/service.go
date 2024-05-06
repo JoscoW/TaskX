@@ -30,3 +30,8 @@ func (t *TaskXService) GetTasks(context.Context, *emptypb.Empty) (*pb.GetTasksRe
 		Tasks: tasks,
 	}, nil
 }
+
+func (t *TaskXService) AddTask(_ context.Context, req *pb.AddTaskReq) (*emptypb.Empty, error) {
+	return &emptypb.Empty{}, t.Repository.AddTask(req.Description)
+
+}

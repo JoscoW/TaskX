@@ -1,7 +1,10 @@
 package cmd
 
 import (
+	"context"
 	"fmt"
+	"taskx-server/pb"
+	"taskx/tool"
 
 	"github.com/spf13/cobra"
 )
@@ -17,6 +20,8 @@ var createCmd = &cobra.Command{
 func init() {
 	clientCmd.AddCommand(createCmd)
 
+	createCmd.Flags().StringP("description", "d", "", "Description of the task")
+
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
@@ -29,7 +34,28 @@ func init() {
 }
 
 func createTask(cmd *cobra.Command, args []string) error {
-	fmt.Println("create task called")
+
+	description, err := cmd.Flags().GetString("description")
+	if err != nil {
+		return err
+	}
+
+	conn, err := tool.GetClientConnection()
+	if err != nil {
+		return err
+	}
+
+	defer conn.Close()
+
+	client := pb.NewTaskXServiceClient(conn)
+	_, err = client.AddTask(context.Background(), &pb.AddTaskReq{
+		Description: description,
+	})
+	if err != nil {
+		return err
+	}
+
+	fmt.Println("Task created!")
 
 	return nil
 }

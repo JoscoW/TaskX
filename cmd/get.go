@@ -60,9 +60,8 @@ func printTasks(tasksResp *pb.GetTasksResp) {
 		fmt.Println("No tasks found")
 		return
 	} else {
-		fmt.Println("Tasks:")
 		for _, t := range tasksResp.Tasks {
-			fmt.Printf("ID: %d, Name: %s, Description: %t\n", t.GetID(), t.GetDescription(), t.GetCompleted())
+			fmt.Printf("ID: %d, Description: %s, Completed: %t\n", t.GetID(), t.GetDescription(), t.GetCompleted())
 		}
 	}
 

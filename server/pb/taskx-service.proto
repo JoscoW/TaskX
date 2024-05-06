@@ -11,7 +11,7 @@ service TaskXService {
 }
 
 message AddTaskReq {
-  string Title = 1;
+  string Description = 1;
 }
 
 message CompleteTaskReq {
