@@ -33,6 +33,8 @@ exists as it's own Go module but in standard use it is run in a Docker container
    - `./taskx client create -d "Some Task"` creates a new task with the description "Some Task"
    - `./taskx client complete 3` marks the task with ID 3 as complete
 
+5. Configuration can be controlled with environment variables. The only variable at the moment is DB_ROOT_PASSWORD. A default value is used if not specified
+6. One way you can set the environment variable is by entering `export DB_ROOT_PASSWORD=yourpassword` in your terminal before running the CLI application
 
 
  
