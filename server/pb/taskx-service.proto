@@ -1,0 +1,33 @@
+syntax = "proto3";
+package pb;
+option go_package = "/pb/";
+
+import "google/protobuf/empty.proto";
+
+service TaskXService {
+  rpc AddTask(AddTaskReq) returns (google.protobuf.Empty) {}
+  rpc CompleteTask(CompleteTaskReq) returns (google.protobuf.Empty) {}
+  rpc GetTasks(google.protobuf.Empty) returns (GetTasksResp) {}
+}
+
+message AddTaskReq {
+  string Title = 1;
+}
+
+message CompleteTaskReq {
+  string ID = 1;
+}
+
+message GetTasksReq {
+  bool IncludeCompleted = 1;
+}
+
+message GetTasksResp {
+  repeated Task Tasks = 1;
+}
+
+message Task {
+  int64 ID = 1;
+  string Description = 2;
+  bool Completed = 3;
+}
