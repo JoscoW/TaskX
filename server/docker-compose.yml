@@ -1,0 +1,39 @@
+services:
+
+  db:
+    container_name: taskx-db
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: taskx-db
+    ports:
+      - "3306:3306"
+    networks:
+      - private-network
+    volumes:
+      - ./data/init:/docker-entrypoint-initdb.d/
+      - taskx-db-volume:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 15s
+      retries: 10
+  app:
+    container_name: golang_container
+    environment:
+      - DB_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+    build: .
+    ports:
+      - "9000:9000"
+    networks:
+      - private-network
+    restart: on-failure
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  taskx-db-volume:
+
+networks:
+  private-network:
+    driver: bridge
