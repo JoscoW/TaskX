@@ -5,6 +5,8 @@ package cmd
 
 import (
 	"fmt"
+	"os/exec"
+	"taskx/tool"
 
 	"github.com/spf13/cobra"
 )
@@ -31,8 +33,19 @@ func init() {
 	// shutdownCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 
-func shutdownServer(cmd *cobra.Command, args []string) error {
-	fmt.Println("shutdown server called")
+func shutdownServer(*cobra.Command, []string) error {
+
+	fmt.Println("Stopping Server...")
+
+	shellCommand := exec.Command("docker-compose", "down")
+	shellCommand.Env = tool.EnsureEnv()
+	shellCommand.Dir = "server"
+	err := shellCommand.Run()
+	if err != nil {
+		return err
+	}
+
+	fmt.Println("Server Stopped")
 
 	return nil
 }

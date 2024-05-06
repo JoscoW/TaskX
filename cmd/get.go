@@ -1,7 +1,11 @@
 package cmd
 
 import (
+	"context"
 	"fmt"
+	"google.golang.org/protobuf/types/known/emptypb"
+	"taskx-server/pb"
+	"taskx/tool"
 
 	"github.com/spf13/cobra"
 )
@@ -29,7 +33,37 @@ func init() {
 }
 
 func getTasks(cmd *cobra.Command, args []string) error {
-	fmt.Println("get tasks called")
+	conn, err := tool.GetClientConnection()
+	if err != nil {
+		return err
+	}
+
+	defer conn.Close()
+
+	client := pb.NewTaskXServiceClient(conn)
+	resp, err := client.GetTasks(context.Background(), &emptypb.Empty{})
+	if err != nil {
+		return err
+	}
+
+	printTasks(resp)
 
 	return nil
+}
+
+func printTasks(tasksResp *pb.GetTasksResp) {
+
+	fmt.Println("Your Tasks:")
+	fmt.Println("============")
+
+	if len(tasksResp.Tasks) == 0 {
+		fmt.Println("No tasks found")
+		return
+	} else {
+		fmt.Println("Tasks:")
+		for _, t := range tasksResp.Tasks {
+			fmt.Printf("ID: %d, Name: %s, Description: %t\n", t.GetID(), t.GetDescription(), t.GetCompleted())
+		}
+	}
+
 }

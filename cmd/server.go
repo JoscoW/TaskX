@@ -2,6 +2,8 @@ package cmd
 
 import (
 	"fmt"
+	"os/exec"
+	"taskx/tool"
 
 	"github.com/spf13/cobra"
 )
@@ -28,8 +30,19 @@ func init() {
 	// serverCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 
-func startServer(cmd *cobra.Command, args []string) error {
-	fmt.Println("server called")
+func startServer(*cobra.Command, []string) error {
+
+	fmt.Println("Starting Server. Please wait...")
+
+	shellCommand := exec.Command("docker-compose", "up", "--build", "-d")
+	shellCommand.Env = tool.EnsureEnv()
+	shellCommand.Dir = "server"
+	err := shellCommand.Run()
+	if err != nil {
+		return err
+	}
+
+	fmt.Println("Started Server")
 
 	return nil
 }

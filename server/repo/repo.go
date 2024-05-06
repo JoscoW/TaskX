@@ -8,6 +8,7 @@ import (
 	"github.com/spf13/viper"
 	"go.uber.org/fx"
 	"log/slog"
+	"taskx-server/pb"
 )
 
 type TaskXRepository struct {
@@ -49,4 +50,14 @@ func NewTaskXRepository(lc fx.Lifecycle, cfg *Config) *TaskXRepository {
 		DB:     db,
 		Config: cfg,
 	}
+}
+
+func (r *TaskXRepository) GetTasks() (tasks []*pb.Task, err error) {
+
+	err = r.DB.Select(&tasks, "SELECT * FROM tasks")
+	if err != nil {
+		return nil, err
+	}
+
+	return tasks, nil
 }

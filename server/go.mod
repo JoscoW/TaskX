@@ -2,7 +2,7 @@ module taskx-server
 
 go 1.22.0
 
-replace taskx-server => ../clitest/server
+replace taskx-server => ./server
 
 require (
 	github.com/go-sql-driver/mysql v1.8.1
